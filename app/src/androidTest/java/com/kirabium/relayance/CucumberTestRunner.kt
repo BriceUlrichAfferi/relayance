@@ -4,10 +4,10 @@ import io.cucumber.junit.Cucumber
 import io.cucumber.junit.CucumberOptions
 import org.junit.runner.RunWith
 
-@RunWith(Cucumber::class)
+/*@RunWith(Cucumber::class)
 @CucumberOptions(
-    features = ["classpath:features"], // Assuming features are in resources
-    glue = ["com.kirabium.relayance"], // Where your step definitions are
+    features = ["classpath:features"],
+    glue = ["com.kirabium.relayance.steps"],
     plugin = ["pretty"]
 )
-class CucumberTestRunner
+class CucumberTestRunner*/

@@ -1,7 +1,9 @@
 package com.kirabium.relayance.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +24,7 @@ class DetailActivity : AppCompatActivity() {
         const val EXTRA_CUSTOMER_ID = "customer_id"
     }
 
-    private val detailsViewModel: DetailsViewModel by viewModels()
+     val detailsViewModel: DetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +32,11 @@ class DetailActivity : AppCompatActivity() {
         val customerId = intent.getIntExtra(EXTRA_CUSTOMER_ID, -1)
         if (customerId != -1) {
             detailsViewModel.loadCustomer(customerId)
-            setContent {
-                DetailScreen(viewModel = detailsViewModel) {
-                    onBackPressedDispatcher.onBackPressed()
-                }
+        }
+        setContent {
+            DetailScreen(viewModel = detailsViewModel) {
+                onBackPressedDispatcher.onBackPressed()
             }
-        } else {
-            // Handle error case
-            finish()
         }
     }
 }

@@ -1,7 +1,10 @@
-Feature: Adding a customer
+Feature: Add Customer Functionality
 
-  Scenario: Successful customer addition
-    Given the user is on the adding page
-    When the user enters a name "John Doe" and a valid email "john@example.com" and presses the save button
-    Then a confirmation toast is displayed
-    And the user is redirected to the home page
+  Scenario: Successfully add a customer
+    Given I am on the Add Customer screen
+    When I enter valid customer details
+      | Name | Email           |
+      | John | john@example.com|
+    And I click the save button
+    Then I should see a success message
+    And I should be navigated to the main activity

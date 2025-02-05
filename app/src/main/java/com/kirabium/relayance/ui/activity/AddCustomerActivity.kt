@@ -14,8 +14,8 @@ import java.util.Date
 @AndroidEntryPoint
 class AddCustomerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddCustomerBinding
-    private lateinit var viewModel: AddCustomerViewModel
+     lateinit var binding: ActivityAddCustomerBinding
+    lateinit var viewModel: AddCustomerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,8 @@ class AddCustomerActivity : AppCompatActivity() {
         setupAddCustomerButton()
     }
 
-    private fun setupAddCustomerButton() {
+
+     fun setupAddCustomerButton() {
         binding.saveFab.setOnClickListener {
             val customer = Customer(
                 id = -1, // We'll update this with the actual ID from the backend
@@ -33,22 +34,25 @@ class AddCustomerActivity : AppCompatActivity() {
                 email = binding.emailEditText.text.toString(),
                 createdAt = Date()
             )
-            viewModel.addCustomer(customer) { updatedCustomers ->
-
-                Toast.makeText(this, "Customer added successfully!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+            viewModel.addCustomer(customer) { updatedCustomers, error ->
+                if (error == null) {
+                    Toast.makeText(this, "Customer added successfully!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Show the error message in a Toast
+                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    private fun setupToolbar() {
+    fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun setupBinding() {
+     fun setupBinding() {
         binding = ActivityAddCustomerBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)

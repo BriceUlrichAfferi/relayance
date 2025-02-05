@@ -3,6 +3,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kirabium.relayance.data.DummyData
 import com.kirabium.relayance.databinding.ActivityMainBinding
@@ -10,6 +11,8 @@ import com.kirabium.relayance.domain.model.Customer
 import com.kirabium.relayance.ui.adapter.CustomerAdapter
 import com.kirabium.relayance.viewmodels.CustomerViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,9 +38,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.customers.observe(this, { customers ->
-            customerAdapter.updateList(customers)
-        })
+        lifecycleScope.launch {
+            viewModel.customers.collectLatest { customers ->
+                customerAdapter.updateList(customers)
+            }
+        }
     }
 
 

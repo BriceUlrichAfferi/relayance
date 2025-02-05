@@ -1,35 +1,36 @@
 package com.kirabium.relayance.util
 
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Root
-import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 class ToastMatcher : TypeSafeMatcher<Root>() {
-    private var currentToast: Toast? = null
 
-    override fun describeTo(description: Description) {
-        description.appendText("is toast with text: ")
+    override fun describeTo(description: Description?) {
+        description?.appendText("is Toast")
     }
 
-    override fun matchesSafely(root: Root): Boolean {
-        val windowType = root.windowLayoutParams.get()?.type
-        if (windowType == WindowManager.LayoutParams.TYPE_TOAST) {
-            val toast = root.decorView.rootView
-            if (toast is Toast) {
-                currentToast = toast
-                return true
-            }
-        }
-        return false
+    override fun matchesSafely(root: Root?): Boolean {
+        // Match Toast using root's window token properties.
+        return root?.decorView?.javaClass?.simpleName == "Toast" // The decorView of a Toast window has this class name
     }
 
     companion object {
-        fun hasToast() = ToastMatcher()
+        fun withText(text: String): Matcher<Root> {
+            return object : TypeSafeMatcher<Root>() {
+                override fun matchesSafely(root: Root?): Boolean {
+                    // Find the toast's message in the decorView
+                    val toastView = root?.decorView?.findViewById<View>(android.R.id.message)
+                    return toastView != null && toastView.toString().contains(text)
+                }
+
+                override fun describeTo(description: Description?) {
+                    description?.appendText("Toast with text: $text")
+                }
+            }
+        }
     }
 }

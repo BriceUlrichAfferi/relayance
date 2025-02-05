@@ -6,6 +6,7 @@ plugins {
     id("jacoco")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id ("dagger.hilt.android.plugin")
     id ("kotlin-parcelize")
 }
 tasks.withType<Test> {
@@ -16,6 +17,7 @@ tasks.withType<Test> {
     useJUnitPlatform() // Configures Gradle to use JUnit Platform for running tests
 
 }
+
 android {
     namespace = "com.kirabium.relayance"
     compileSdk = 34
@@ -75,8 +77,8 @@ android {
 
     //This Ensure that the resources folder is properly included in the build
     sourceSets {
-        getByName("androidTest") {
-            resources.srcDirs("src/androidTest/resources")
+        getByName("test") {
+           resources.srcDirs("src/androidTest/resources/features")
         }
     }
 
@@ -123,14 +125,31 @@ dependencies {
     // DI (Hilt)
     implementation("com.google.dagger:hilt-android:2.55")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+    androidTestImplementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+
 
     kapt("com.google.dagger:hilt-android-compiler:2.55")
 
 
     // JUnit 5 dependencies for unit tests
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3") // Added this
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
 
+    testImplementation("org.mockito:mockito-core:5.15.2")
+
+    testImplementation("org.mockito:mockito-junit-jupiter:5.15.2")
+    // Hilt Testing
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.55")
+
+    testImplementation ("io.mockk:mockk:1.12.3")
+    androidTestImplementation ("io.mockk:mockk-android:1.12.3")
+    androidTestImplementation ("org.mockito:mockito-android:3.12.4")
+    testImplementation("org.mockito:mockito-core:5.15.2")
+
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     // AssertJ for assertions
     testImplementation("org.assertj:assertj-core:3.27.3")
 
@@ -152,10 +171,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Cucumber dependencies
-    testImplementation ("io.cucumber:cucumber-junit:7.20.1")
+   /* // Cucumber dependencies for JUnit 5
     implementation("io.cucumber:cucumber-java:7.20.1")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.21.0") // For JUnit 5
     androidTestImplementation("io.cucumber:cucumber-android:7.18.1")
+    testImplementation("io.cucumber:cucumber-junit:7.21.0")*/
+
+    androidTestImplementation("io.cucumber:cucumber-android:7.18.1")
+    androidTestImplementation("io.cucumber:cucumber-junit:7.21.0") // JUnit 4 version
+    androidTestImplementation("io.cucumber:cucumber-java:7.21.0")
+
 }
 
 // Allow references to generated code
